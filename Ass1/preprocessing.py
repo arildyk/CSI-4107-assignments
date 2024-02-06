@@ -50,19 +50,6 @@ def remove_stop_words(tokens):
         tokens = [token for token in tokens if token not in stop_words]
     return tokens
 
-
-# def convert_files(input_folder, output_folder):
-#     for filename in os.listdir(input_folder):
-#         input_path = os.path.join(input_folder, filename)
-
-#         if os.path.isfile(input_path):
-#             with open(input_path, 'r', encoding='utf-8') as input_file:
-#                 file_content = input_file.read()
-
-#                 output_path = os.path.join(output_folder, f'{os.path.splitext(filename)[0]}.txt')
-#                 with open(output_path, 'w', encoding='utf-8') as output_file:
-#                     output_file.write(file_content)
-
 vocabulary = []
 
 for filename in os.listdir(os.getcwd() + "/coll1/"):
@@ -99,7 +86,5 @@ vocabulary = sorted(list(vocabulary_set))
 with open("vocabulary.txt", 'w', encoding='utf-8') as output_file:
     for word in vocabulary:
         output_file.write(word + '\n')
-
-# convert_files(os.getcwd() + "/coll/", os.getcwd() + "/coll1/")
 
 print(vocabulary)
