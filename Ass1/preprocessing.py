@@ -7,12 +7,14 @@ from nltk.stem import PorterStemmer
 #! Don't forget to also uncomment the comment below before running (just do it once).
 # nltk.download('punkt')
 
-def read_doc_and_tokenize(doc, tag_name):
+def read_file_and_tokenize(file, tag_name):
     # Extract content within the specified tag
     #* Extraire le contenu dans le tag spécifiée
     pattern = f'<{tag_name}>(.*?)</{tag_name}>'
-    matches = re.findall(pattern, doc, re.DOTALL | re.IGNORECASE)
+    matches = re.findall(pattern, file, re.DOTALL | re.IGNORECASE)
 
+    tokens_final = []
+    
     if matches:
         for i in range(len(matches)):
             text = matches[i]
@@ -28,11 +30,13 @@ def read_doc_and_tokenize(doc, tag_name):
             # Tokenize and convert to lowercase.
             #* Tokeniser et convertir en lettres minuscules.
             tokens = nltk.word_tokenize(polished_text)
-            tokens_lower = [token.lower() for token in tokens]
 
-        return tokens_lower
+            for token in tokens:
+                tokens_final.append(token)
+
+        return tokens_final
     else:
-        return []
+        return tokens_final
 
 def stem(tokens):
     # Stem each token in tokens.
@@ -60,11 +64,11 @@ for filename in os.listdir(os.getcwd() + "/coll1/"):
 
         # Preprocess words within the TEXT tags.
         #* Prétraitez les mots dans les tags TEXT.
-        words_text = remove_stop_words(stem(read_doc_and_tokenize(document, 'TEXT')))
+        words_text = remove_stop_words(stem(read_file_and_tokenize(document, 'TEXT')))
 
         # Preprocess words within the HEAD tags.
         #* Prétraitez les mots dans les tags HEAD.
-        words_head = remove_stop_words(stem(read_doc_and_tokenize(document, 'HEAD')))
+        words_head = remove_stop_words(stem(read_file_and_tokenize(document, 'HEAD')))
 
         # Remove potential duplicate words by combining words_head and words_text into a set.
         #* Supprimez les mots en double potentiels en combinant words_head et words_text dans un ensemble.
