@@ -20,7 +20,7 @@ def build_inverted_index():
         with open(file_path, 'r', encoding='utf-8') as file:
             textfile = file.read()
 
-            documents = re.findall('<DOC>(.*?)</DOC>', textfile, re.DOTALL)
+            documents = re.findall(r'<DOC>(.*?)<\/DOC>', textfile, re.DOTALL)
 
             for d in documents:
                 doc_no = read_file_and_tokenize(d, 'DOCNO')[0].strip()
