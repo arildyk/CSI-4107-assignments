@@ -15,28 +15,28 @@ def read_file_and_tokenize(file, tag_name):
 
     tokens_final = []
     
-    if matches:
-        for i in range(len(matches)):
-            text = matches[i]
+    if tag_name == "DOCNO":
+        return matches
+    
+    for i in range(len(matches)):
+        text = matches[i]
 
-            # Remove HTML tags.
-            # *Supprimez les tags HTML.
-            html_free_content = re.sub(r"<[^>]+>", " ", text)
+        # Remove HTML tags.
+        # *Supprimez les tags HTML.
+        html_free_content = re.sub(r"<[^>]+>", " ", text)
 
-            # Remove punctuation and numbers, replace with space.
-            #* Supprimez la ponctuation et les chiffres, remplacez-les par un espace.
-            polished_text = re.sub(r"[^a-zA-Z\s]", " ", html_free_content)
+        # Remove punctuation and numbers, replace with space.
+        #* Supprimez la ponctuation et les chiffres, remplacez-les par un espace.
+        polished_text = re.sub(r"[^a-zA-Z\s]", " ", html_free_content)
 
-            # Tokenize and convert to lowercase.
-            #* Tokeniser et convertir en lettres minuscules.
-            tokens = nltk.word_tokenize(polished_text)
+        # Tokenize and convert to lowercase.
+        #* Tokeniser et convertir en lettres minuscules.
+        tokens = nltk.word_tokenize(polished_text)
 
-            for token in tokens:
-                tokens_final.append(token)
+        for token in tokens:
+            tokens_final.append(token)
 
-        return tokens_final
-    else:
-        return tokens_final
+    return tokens_final
 
 def stem(tokens):
     # Stem each token in tokens.
