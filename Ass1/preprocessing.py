@@ -11,7 +11,7 @@ def read_file_and_tokenize(file, tag_name):
     # Extract content within the specified tag
     #* Extraire le contenu dans le tag spécifiée
     pattern = f'<{tag_name}>(.*?)</{tag_name}>'
-    matches = re.findall(pattern, file, re.DOTALL | re.IGNORECASE)
+    matches = re.findall(pattern, file, re.DOTALL)
 
     tokens_final = []
     
