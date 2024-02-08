@@ -18,9 +18,7 @@ def read_file_and_tokenize(file, tag_name):
     if tag_name == "DOCNO":
         return matches
     
-    for i in range(len(matches)):
-        text = matches[i]
-
+    for text in matches:
         # Remove HTML tags.
         # *Supprimez les tags HTML.
         html_free_content = re.sub(r"<[^>]+>", " ", text)
@@ -48,7 +46,7 @@ def stem(tokens):
 def remove_stop_words(tokens):
     # Remove each stop word in tokens.
     #* Supprimez chaque stop word dans le tableau tokens.
-    with open("stop_words.txt", 'r', encoding='utf-8') as file:
+    with open("stop_words.txt", 'r') as file:
         content = file.read()
         stop_words = nltk.word_tokenize(content)
         tokens = [token for token in tokens if token not in stop_words]
@@ -60,7 +58,7 @@ if __name__ == "__main__":
     for filename in os.listdir(os.getcwd() + "/coll1/"):
         file_path = os.path.join(os.getcwd() + "/coll1/", filename)
 
-        with open(file_path, 'r', encoding='utf-8') as file:
+        with open(file_path, 'r') as file:
             document = file.read()
 
             # Preprocess words within the TEXT tags.
@@ -88,7 +86,7 @@ if __name__ == "__main__":
     vocabulary_set = set(vocabulary)
     vocabulary = sorted(list(vocabulary_set))
 
-    with open("vocabulary.txt", 'w', encoding='utf-8') as output_file:
+    with open("vocabulary.txt", 'w') as output_file:
         for word in vocabulary:
             output_file.write(word + '\n')
 
