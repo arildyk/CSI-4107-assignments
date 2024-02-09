@@ -2,6 +2,7 @@ import os
 import re
 import nltk
 from nltk.stem import PorterStemmer
+import time
 
 #! do pip install nltk on your terminal if you don't have nltk. 
 #! Don't forget to also uncomment the comment below before running (just do it once).
@@ -43,31 +44,39 @@ def stem(tokens):
     stemmed_tokens = [p.stem(token) for token in tokens]
     return stemmed_tokens
 
-def remove_stop_words(tokens):
-    # Remove each stop word in tokens.
-    #* Supprimez chaque stop word dans le tableau tokens.
+def load_stop_words():
+    # Load the stop words.
     with open("stop_words.txt", 'r') as file:
         content = file.read()
-        stop_words = nltk.word_tokenize(content)
-        tokens = [token for token in tokens if token not in stop_words]
-    return tokens
+        return set(nltk.word_tokenize(content))
+
+def remove_stop_words(stop_words, tokens):
+    return [token for token in tokens if token not in stop_words]
+
 
 if __name__ == "__main__":
+
+    start_time = time.time()
+
     vocabulary = []
+
+    stop_words = load_stop_words()
 
     for filename in os.listdir(os.getcwd() + "/coll1/"):
         file_path = os.path.join(os.getcwd() + "/coll1/", filename)
+
+        print("doing " + filename + "...")
 
         with open(file_path, 'r') as file:
             document = file.read()
 
             # Preprocess words within the TEXT tags.
             #* Prétraitez les mots dans les tags TEXT.
-            words_text = remove_stop_words(stem(read_file_and_tokenize(document, 'TEXT')))
+            words_text = remove_stop_words(stop_words, stem(read_file_and_tokenize(document, 'TEXT')))
 
             # Preprocess words within the HEAD tags.
             #* Prétraitez les mots dans les tags HEAD.
-            words_head = remove_stop_words(stem(read_file_and_tokenize(document, 'HEAD')))
+            words_head = remove_stop_words(stop_words, stem(read_file_and_tokenize(document, 'HEAD')))
 
             # Remove potential duplicate words by combining words_head and words_text into a set.
             #* Supprimez les mots en double potentiels en combinant words_head et words_text dans un ensemble.
@@ -90,4 +99,7 @@ if __name__ == "__main__":
         for word in vocabulary:
             output_file.write(word + '\n')
 
-    print(vocabulary)
+    end_time = time.time()
+    ex_time = end_time - start_time
+
+    print(f"Execution time: {ex_time} seconds")
