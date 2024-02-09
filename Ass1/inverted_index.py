@@ -40,6 +40,7 @@ def build_inverted_index():
                             index[token][doc_no] = 1
     
     with open('index.json', 'w') as json_file:
+        print("Dumping to JSON...")
         json.dump(index, json_file, indent=4)
 
 if __name__ == "__main__":
