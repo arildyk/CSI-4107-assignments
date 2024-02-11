@@ -2,7 +2,7 @@ import itertools
 import json
 import math
 import nltk
-from preprocessing import load_stop_words, read_file_and_tokenize, remove_stop_words, stem
+from preprocessing import load_stop_words, remove_stop_words, stem
 
 def get_idf_values(N, inverted_index):
     idf_values = {}
