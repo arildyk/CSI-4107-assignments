@@ -106,7 +106,6 @@ def save_results(results, output_file):
 
 if __name__ == "__main__":
 
-    # Charger l'index inversé depuis le fichier JSON.
     with open('index.json', 'r') as json_file:
         print("Opening JSON index file...")
         inverted_index = json.load(json_file)
