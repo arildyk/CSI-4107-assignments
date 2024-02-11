@@ -6,6 +6,7 @@ import time
 from preprocessing import load_stop_words, read_file_and_tokenize, remove_stop_words, stem
 
 def build_inverted_index():
+    number_of_docs = 0
     print("Opening vocabulary...")
 
     with open("vocabulary.txt", 'r') as file:
@@ -27,6 +28,8 @@ def build_inverted_index():
             for d in documents:
                 doc_no = read_file_and_tokenize(d, 'DOCNO')[0].strip()
 
+                number_of_docs += 1
+
                 tokens_text = remove_stop_words(stop_words, stem(read_file_and_tokenize(d, 'TEXT')))
                 tokens_head = remove_stop_words(stop_words, stem(read_file_and_tokenize(d, 'HEAD')))
 
@@ -42,6 +45,7 @@ def build_inverted_index():
     with open('index.json', 'w') as json_file:
         print("Dumping to JSON...")
         json.dump(index, json_file, indent=4)
+    print("Number of documents :", number_of_docs)
 
 if __name__ == "__main__":
 
