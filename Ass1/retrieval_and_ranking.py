@@ -121,7 +121,7 @@ if __name__ == "__main__":
     doc_vecs = create_doc_vectors(inverted_index)
 
     print("Getting queries...")
-    queries = load_queries("queries.txt", titles_only=True)
+    queries = load_queries("queries.txt", titles_only=False)
 
     print("Preparing document vectors...")
     tf_idf_docs = calculate_docs_tf_idf_values(doc_vecs, idf_values)
@@ -130,9 +130,9 @@ if __name__ == "__main__":
     tf_idf_queries = calculate_queries_tf_idf_values(queries, idf_values, stop_words)
 
     print("Getting similarity scores...")
-    results_titles = retrieve_and_rank_queries(tf_idf_docs, tf_idf_queries)
+    results_titles_and_desc = retrieve_and_rank_queries(tf_idf_docs, tf_idf_queries)
 
-    save_results(results_titles, 'results_titles.txt')
+    save_results(results_titles_and_desc, 'results_titles_and_desc.txt')
 
 
     
