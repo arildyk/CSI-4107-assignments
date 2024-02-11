@@ -102,7 +102,7 @@ def save_results(results, output_file):
     with open(output_file, 'w') as file:
         for query_id, ranked_documents in results.items():
             for rank, (doc_id, score) in enumerate(ranked_documents[:1000], start=1):
-                file.write(f"{query_id} Q0 {doc_id} {rank} {score:.4f} nom_execution\n")
+                file.write(f"{query_id} Q0 {doc_id} {rank} {score:.4f} name_execution\n")
 
 
 if __name__ == "__main__":
