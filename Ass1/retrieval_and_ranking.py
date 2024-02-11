@@ -3,12 +3,14 @@ import math
 import nltk
 from preprocessing import load_stop_words, remove_stop_words, stem
 
+# Gets the idf values of all the words present in the inverted index.
 def get_idf_values(N, inverted_index):
     idf_values = {}
     for token in inverted_index:
         idf_values[token] = math.log2(N / len(inverted_index[token]))
     return idf_values
 
+# Generates the documents vectors from the inverted index.
 def create_doc_vectors(inverted_index):
     vecs = {}
 
@@ -19,12 +21,14 @@ def create_doc_vectors(inverted_index):
             else:
                 vecs[doc_no] = {}
     
+    # Normalization of the document vectors
     vecs_normalized = {}
     for doc_no, tokens in vecs.items():
         vecs_normalized[doc_no] = {token: tf / max(tokens.values()) for token, tf in tokens.items()}
     
     return vecs_normalized
 
+# Calculate the tf-idf values for each document.
 def calculate_docs_tf_idf_values(document_vectors, idf_values):
     tf_idf_docs = {}
 
@@ -37,6 +41,7 @@ def calculate_docs_tf_idf_values(document_vectors, idf_values):
     
     return tf_idf_docs
 
+# Loads the queries
 def load_queries(file_path, titles_only=True):
     queries = {}
     with open(file_path, 'r') as file:

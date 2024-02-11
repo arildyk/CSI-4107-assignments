@@ -3,7 +3,7 @@
 |Student Name|Student Number|
 |---|---|
 |Arild Yonkeu|300123590|
-|David Lumbu|000000000|
+|David Lumbu|300144520|
 
 ## Task Distribution
 
