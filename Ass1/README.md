@@ -30,11 +30,11 @@ python retrieval_and_ranking.py
 
 ### Preprocessing
 
-To preprocess our collection of documents, we created four functions, `read_file_and_tokenize()`, `stem()`, `load_stop_words()`, and `remove_stop_words()`. Throughout our Python file, we have tried to use set in many places as possible, as they are faster than using lists. The `read_file_and_tokenize()` function will extract content within a specified file and return a list of tokens. The `stem()` function will use the PorterStemmer to stem a list of tokens as input and return a list of stemmed tokens. The `load_stop_words()` function will load our stopwords in the `stop_words.txt` into a set. Finally, our `remove_stop_words()` will take our loaded stop words and tokens as input and return a set of tokens without stop words. the `load_stop_words()` is executed only once while the rest of the functions are executed for each file in our collection, and therefore we generate our vocabulary. Our vocabulary has a total of 122340 words.
+To preprocess our collection of documents, we created four functions, `read_file_and_tokenize()`, `stem()`, `load_stop_words()`, and `remove_stop_words()`. Throughout our Python file, we have tried to use sets in many places as possible, as they are faster than using lists. The `read_file_and_tokenize()` function will extract content within a specified file and return a list of tokens. The `stem()` function will use the PorterStemmer to stem a list of tokens as input and return a list of stemmed tokens. The `load_stop_words()` function will load our stopwords in the `stop_words.txt` into a set. Finally, our `remove_stop_words()` will take our loaded stop words and tokens as input and return a set of tokens without stop words. the `load_stop_words()` is executed only once while the rest of the functions are executed for each file in our collection, and therefore we generate our vocabulary. Our vocabulary has a total of 122340 words.
 
 ### Indexing
 
-With our generated vocabulary, we build our inverted index with a dictionary. It uses the tokens in the vocabulary as the keys and values are dictionaries with the document number that the token appears in and the number of times it occurs as the value. We do this using the `build_inverted_index()` function. This function will output our index into a JSON file format.
+With our generated vocabulary, we build our inverted index with a dictionary. It uses the tokens in the vocabulary as the keys and the values are dictionaries with the document number that the token appears in and the number of times it occurs as the value. We do this using the `build_inverted_index()` function. This function will output our index into a JSON file format.
 
 Example of the structure of the index
 
