@@ -1,5 +1,6 @@
 import json
 import math
+import re
 import nltk
 from preprocessing import load_stop_words, remove_stop_words, stem
 
