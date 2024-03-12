@@ -63,7 +63,7 @@ def calculate_queries_tf_idf_values(queries, idf_values, stop_words):
     tf_idf_queries = {}
     for query_num, query_info in queries.items():
         query_text = query_info['title'] + ' ' + query_info.get('desc', '')  # Combine title and description
-        query_tokens = remove_stop_words(stop_words, stem(nltk.word_tokenize(query_text)))
+        query_tokens = remove_stop_words(stop_words, stem(nltk.word_tokenize(re.sub(r"[^a-zA-Z\s]", " ", query_text))))
 
         query_tokens_tf = {}
         for token in query_tokens:
@@ -116,7 +116,7 @@ def retrieve_and_rank_queries(tf_idf_docs, tf_idf_queries):
 
     return expanded_results
 
-def pseudo_relevance_feedback(tf_idf_docs, tf_idf_queries, initial_results, N=15, M=15):
+def pseudo_relevance_feedback(tf_idf_docs, tf_idf_queries, initial_results, N=100, M=100):
     expanded_queries = {}
     for query_num, ranked_docs in initial_results.items():
         # Grab top documents from each query
