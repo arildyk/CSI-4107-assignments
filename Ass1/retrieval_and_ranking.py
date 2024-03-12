@@ -100,7 +100,46 @@ def retrieve_and_rank_queries(tf_idf_docs, tf_idf_queries):
         
         ranked_docs = sorted(sim_scores.items(), key=lambda x: x[1], reverse=True)
         results[query_num] = ranked_docs
-    return results
+    
+    print("Performing feedback loop...")
+    pseudo_relevance_feedback(tf_idf_docs, tf_idf_queries, results)
+
+    expanded_results = {}
+    for query_num, query_vec in tf_idf_queries.items():
+        sim_scores = {}
+        for doc_no, doc_vec in tf_idf_docs.items():
+            sim = cos_sim(doc_vec, query_vec)
+            sim_scores[doc_no] = sim
+        
+        ranked_docs = sorted(sim_scores.items(), key=lambda x: x[1], reverse=True)
+        expanded_results[query_num] = ranked_docs
+
+    return expanded_results
+
+def pseudo_relevance_feedback(tf_idf_docs, tf_idf_queries, initial_results, N=15, M=15):
+    expanded_queries = {}
+    for query_num, ranked_docs in initial_results.items():
+        # Grab top documents from each query
+        top_docs = [doc_no for doc_no, _ in ranked_docs[:N]]
+        token_scores = {}
+        for doc_no in top_docs:
+            for token, tf_idf in tf_idf_docs[doc_no].items():
+                # Get the term scores of each term
+                if token in token_scores:
+                    token_scores[token] += tf_idf
+                else:
+                    token_scores[token] = tf_idf
+
+        top_tokens = sorted(token_scores, key=token_scores.get, reverse=True)[:M]
+        expanded_query = expand_query(tf_idf_queries[query_num], top_tokens)
+        expanded_queries[query_num] = expanded_query
+    return expanded_queries
+
+def expand_query(query, tokens):
+    for token in tokens:
+        if token not in query:
+            query[token] = 1
+    return query
 
 def save_results(results, output_file):
     with open(output_file, 'w') as file:
