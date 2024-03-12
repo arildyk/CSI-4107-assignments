@@ -90,7 +90,7 @@ def cos_sim(doc_vec, query_vec):
     else:
         return 0
 
-def retrieve_and_rank_queries(tf_idf_docs, tf_idf_queries):
+def retrieve_and_rank_queries(tf_idf_docs, tf_idf_queries, queries):
     
     results = {}
     for query_num, query_vec in tf_idf_queries.items():
@@ -103,10 +103,11 @@ def retrieve_and_rank_queries(tf_idf_docs, tf_idf_queries):
         results[query_num] = ranked_docs
     
     print("Performing feedback loop...")
-    pseudo_relevance_feedback(tf_idf_docs, tf_idf_queries, results)
+    expanded_queries = pseudo_relevance_feedback(tf_idf_docs, queries, results)
+    expanded_tf_idf_queries = calculate_queries_tf_idf_values(expanded_queries, idf_values, stop_words)
 
     expanded_results = {}
-    for query_num, query_vec in tf_idf_queries.items():
+    for query_num, query_vec in expanded_tf_idf_queries.items():
         sim_scores = {}
         for doc_no, doc_vec in tf_idf_docs.items():
             sim = cos_sim(doc_vec, query_vec)
@@ -117,7 +118,7 @@ def retrieve_and_rank_queries(tf_idf_docs, tf_idf_queries):
 
     return expanded_results
 
-def pseudo_relevance_feedback(tf_idf_docs, tf_idf_queries, initial_results, N=100, M=100):
+def pseudo_relevance_feedback(tf_idf_docs, queries, initial_results, N=100, M=50):
     expanded_queries = {}
     for query_num, ranked_docs in initial_results.items():
         # Grab top documents from each query
@@ -132,15 +133,15 @@ def pseudo_relevance_feedback(tf_idf_docs, tf_idf_queries, initial_results, N=10
                     token_scores[token] = tf_idf
 
         top_tokens = sorted(token_scores, key=token_scores.get, reverse=True)[:M]
-        expanded_query = expand_query(tf_idf_queries[query_num], top_tokens)
-        expanded_queries[query_num] = expanded_query
+        expanded_queries[query_num] = expand_query(queries[query_num], top_tokens)
     return expanded_queries
 
 def expand_query(query, tokens):
+    expanded_query = query.copy()  # Assuming original_query is a dict or similar
     for token in tokens:
-        if token not in query:
-            query[token] = 1
-    return query
+        if token not in expanded_query['title']:
+            expanded_query['title'] += f" {token}"
+    return expanded_query
 
 def save_results(results, output_file):
     with open(output_file, 'w') as file:
@@ -175,7 +176,7 @@ if __name__ == "__main__":
     tf_idf_queries = calculate_queries_tf_idf_values(queries, idf_values, stop_words)
 
     print("Getting similarity scores...")
-    results_titles_and_desc = retrieve_and_rank_queries(tf_idf_docs, tf_idf_queries)
+    results_titles_and_desc = retrieve_and_rank_queries(tf_idf_docs, tf_idf_queries, queries)
 
     save_results(results_titles_and_desc, 'results_titles_and_desc.txt')
 
