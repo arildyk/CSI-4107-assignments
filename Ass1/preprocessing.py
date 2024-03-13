@@ -8,6 +8,15 @@ import time
 #! Don't forget to also uncomment the comment below before running (just do it once).
 # nltk.download('punkt')
 
+def clean_text(text):
+    # Normalize hyphenated words
+    text = re.sub(r'-\s*', '', text)
+    # Normalize quotation marks
+    text = re.sub(r'[\u2018\u2019\u201C\u201D]', '"', text)
+    # Remove punctuation and numbers (keeping underscores in this example)
+    text = re.sub(r'[^a-zA-Z\s]', ' ', text)
+    return text
+
 def read_file_and_tokenize(file, tag_name):
     # Extract content within the specified tag
     pattern = f'<{tag_name}>(.*?)</{tag_name}>'
@@ -23,7 +32,7 @@ def read_file_and_tokenize(file, tag_name):
         html_free_content = re.sub(r"<[^>]+>", " ", text)
 
         # Remove punctuation and numbers, replace with space.
-        polished_text = re.sub(r"[^a-zA-Z\s]", " ", html_free_content)
+        polished_text = clean_text(html_free_content)
 
         # Tokenize and convert to lowercase.
         tokens = nltk.word_tokenize(polished_text)
